@@ -1,0 +1,180 @@
+<%- include('header-layout', {title: 'Register' }) %>
+
+    <div class="h-screen">
+
+        <%- include('home-navbar') %>
+
+            <div class="px-12 py-4">
+                <div>
+                    <button type="button" onclick="toggleUploadPopup(event)"
+                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                        Upload File
+                    </button>
+
+                </div>
+
+                <div class="mt-4 relative overflow-x-auto shadow-md sm:rounded-lg">
+
+
+
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    Name
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Created at
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    <span class="sr-only">Download</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+
+                            <% files.forEach(function(file){ %>
+
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <th scope="row"
+                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        <%= file.originalName %>
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        <%= file.createdAt.toLocaleDateString('en-US', { year: 'numeric' ,
+                                            month: 'short' , day: 'numeric' , hour: '2-digit' , minute: '2-digit' ,
+                                            second: '2-digit' , hour12: true }); %>
+                                    </td>
+                                    <td class="px-6 py-4 flex justify-end">
+                                        <button onclick="handleDownload(event, '<%= file.id %>')"
+                                            class="font-medium text-blue-600 dark:text-blue-500 hover:underline border border-2 border-blue-600 dark:border-blue-500 hover:brightness-150 rounded-full w-10 h-10 flex justify-center items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                                fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
+                                                <path
+                                                    d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z" />
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <% }); %>
+
+
+
+                        </tbody>
+                    </table>
+
+
+
+                </div>
+            </div>
+
+            <form action="/upload" onsubmit="handleFileUpload(event)" method="post" enctype="multipart/form-data"
+                id="uploadPopup" style="display: none;"
+                class="backdrop-blur-sm m-auto absolute top-0 flex justify-center w-screen h-screen">
+
+                <div class="flex items-center justify-center w-96">
+                    <label for="dropzone-file"
+                        class="relative flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+
+                        <div onclick="toggleUploadPopup(event)"
+                            class="absolute right-0 top-0 p-1 text-gray-700 hover:text-black dark:text-gray-400 dark:hover:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                                viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                                <path
+                                    d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
+                            </svg>
+                        </div>
+
+                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                            <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                            </svg>
+                            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click
+                                    to upload</span> or drag and drop</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)
+                            </p>
+                        </div>
+                        <input id="dropzone-file" onchange="handleFileUploadChange(event)" name="file" type="file"
+                            class="hidden" />
+
+                        <div class="flex flex-col items-center gap-2" id="uploadPopupUploadStatus" style="display: none;">
+                            <p>
+                                Selected file: <span id="popupFileStatusName"></span>
+                            </p>
+                            <button type="submit" id="uploadPopupUploadButton"
+                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                Upload
+                            </button>
+                        </div>
+                    </label>
+                </div>
+
+            </form>
+
+
+    </div>
+
+
+    <script>
+        function toggleUploadPopup(e) {
+            e.preventDefault()
+            const uploadPopup = document.getElementById('uploadPopup')
+            if (uploadPopup.style.display == 'none') {
+                uploadPopup.style.display = 'flex'
+            }
+            else {
+                uploadPopup.style.display = 'none'
+            }
+        }
+
+        function handleFileUploadChange(e) {
+            const popupStatus = document.getElementById('uploadPopupUploadStatus')
+
+            const file = e.target.files[0]
+
+            if (file) {
+                document.getElementById('popupFileStatusName').innerHTML = file.name
+                popupStatus.style.display = 'flex'
+            }
+        }
+
+        function handleFileUpload(e) {
+            const button = document.getElementById('uploadPopupUploadButton')
+
+            button.classList.add('animate-bounce')
+            return true
+        }
+    </script>
+
+    <script>
+        async function handleDownload(e, fileId) {
+            const button = e.currentTarget
+
+            button.classList.add('animate-bounce')
+
+            const response = await fetch(`/download/${fileId}`)
+            const data = await response.json()
+
+            const file = await fetch(data.downloadUrl)
+            const fileBlob = await file.blob()
+            const fileUrl = URL.createObjectURL(fileBlob)
+
+            const downloadLink = document.createElement('a')
+            downloadLink.href = fileUrl
+            downloadLink.download = data.originalName
+            document.body.appendChild(downloadLink)
+            downloadLink.click()
+            document.body.removeChild(downloadLink)
+
+            button.classList.remove('animate-bounce')
+        }
+    </script>
+
+    <%- include('footer-layout') %>
